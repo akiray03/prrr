@@ -1,10 +1,13 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
 
+import domains.issue.IssueRepository
 import domains.user.UserRepository
+import infrastructure.issue.IssueRepositoryImpl
 import infrastructure.user.UserRepositoryImpl
+import services.issue.{IssueService, IssueServiceImpl}
 import services.{ApplicationTimer, AtomicCounter, Counter}
-import services.user.{UserService,UserServiceImpl}
+import services.user.{UserService, UserServiceImpl}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -33,9 +36,11 @@ class Module extends AbstractModule {
 
   private def configureInfrastructures() = {
     bind(classOf[UserRepository]).to(classOf[UserRepositoryImpl])
+    bind(classOf[IssueRepository]).to(classOf[IssueRepositoryImpl])
   }
 
   private def configureServices() = {
     bind(classOf[UserService]).to(classOf[UserServiceImpl])
+    bind(classOf[IssueService]).to(classOf[IssueServiceImpl])
   }
 }

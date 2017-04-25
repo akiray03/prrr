@@ -2,7 +2,8 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET /users controllers.user.UserController.index
+GET /users  controllers.user.UserController.index
+GET /issues controllers.IssuesController.index
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index

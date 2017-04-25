@@ -1,6 +1,8 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
 
+import domains.user.UserRepository
+import infrastractures.user.UserRepositoryImpl
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -23,6 +25,11 @@ class Module extends AbstractModule {
     bind(classOf[ApplicationTimer]).asEagerSingleton()
     // Set AtomicCounter as the implementation for Counter.
     bind(classOf[Counter]).to(classOf[AtomicCounter])
+
+    configureInfrastractures()
   }
 
+  private def configureInfrastractures() = {
+    bind(classOf[UserRepository]).to(classOf[UserRepositoryImpl])
+  }
 }

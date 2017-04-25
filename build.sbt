@@ -15,4 +15,3 @@ libraryDependencies ++= Seq(
   "org.scalikejdbc"      %% "scalikejdbc-play-initializer"   % "2.5.+",
   "org.skinny-framework" %% "skinny-orm" % "2.3.+"
 )
-

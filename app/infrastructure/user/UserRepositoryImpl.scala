@@ -1,4 +1,4 @@
-package infrastractures.user
+package infrastructure.user
 
 import java.sql.SQLException
 import play.api.Logger

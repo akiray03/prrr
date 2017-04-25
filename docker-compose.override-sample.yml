@@ -1,0 +1,13 @@
+# Composeファイルの設定を上書きする設定
+# #
+# # docker-compose.override.ymlにコピーして利用してください。
+# # Composeファイルが明示的に指定されていない場合は自動的に読み込まれます。
+# #
+version: "3"
+services:
+  mysql:
+    ports:
+      - "3306:3306"
+  # play:
+  #   ports:
+  #     - "9000:9000"

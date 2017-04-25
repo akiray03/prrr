@@ -4,6 +4,7 @@ import java.time.Clock
 import domains.user.UserRepository
 import infrastractures.user.UserRepositoryImpl
 import services.{ApplicationTimer, AtomicCounter, Counter}
+import services.user.{UserService,UserServiceImpl}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -27,9 +28,14 @@ class Module extends AbstractModule {
     bind(classOf[Counter]).to(classOf[AtomicCounter])
 
     configureInfrastractures()
+    configureServices()
   }
 
   private def configureInfrastractures() = {
     bind(classOf[UserRepository]).to(classOf[UserRepositoryImpl])
+  }
+
+  private def configureServices() = {
+    bind(classOf[UserService]).to(classOf[UserServiceImpl])
   }
 }

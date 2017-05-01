@@ -16,5 +16,6 @@ libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-orm" % "2.3.+",
   "io.spray"             %% "spray-json"      % "1.3.3",
   "org.skinny-framework" %% "skinny-http-client" % "2.3.6",
-  "org.slf4j" % "slf4j-simple" % "1.7.25"
+  "org.slf4j" % "slf4j-simple" % "1.7.25",
+  "org.flywaydb" %% "flyway-play" % "3.0.1"
 )

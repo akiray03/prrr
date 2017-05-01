@@ -4,6 +4,7 @@
 
 GET /users  controllers.user.UserController.index
 GET /issues controllers.IssuesController.index
+GET /issue_queries controllers.IssueQueriesController.index
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index

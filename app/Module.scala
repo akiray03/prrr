@@ -2,10 +2,13 @@ import com.google.inject.AbstractModule
 import java.time.Clock
 
 import domains.issue.IssueRepository
+import domains.issue_query.IssueQueryRepository
 import domains.user.UserRepository
 import infrastructure.issue.IssueRepositoryImpl
+import infrastructure.issue_query.IssueQueryRepositoryImpl
 import infrastructure.user.UserRepositoryImpl
 import services.issue.{IssueService, IssueServiceImpl}
+import services.issue_query.{IssueQueryService, IssueQueryServiceImpl}
 import services.{ApplicationTimer, AtomicCounter, Counter}
 import services.user.{UserService, UserServiceImpl}
 
@@ -37,10 +40,12 @@ class Module extends AbstractModule {
   private def configureInfrastructures() = {
     bind(classOf[UserRepository]).to(classOf[UserRepositoryImpl])
     bind(classOf[IssueRepository]).to(classOf[IssueRepositoryImpl])
+    bind(classOf[IssueQueryRepository]).to(classOf[IssueQueryRepositoryImpl])
   }
 
   private def configureServices() = {
     bind(classOf[UserService]).to(classOf[UserServiceImpl])
     bind(classOf[IssueService]).to(classOf[IssueServiceImpl])
+    bind(classOf[IssueQueryService]).to(classOf[IssueQueryServiceImpl])
   }
 }

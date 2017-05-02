@@ -5,7 +5,7 @@ import DefaultJsonProtocol._
 import java.time.ZonedDateTime
 import library.json_protocol.ZonedDateTimeJsonProtocol._
 
-case class IssueUser(
+case class GitHubUser(
                       login: String,
                       id: Long,
                       avatar_url: String,
@@ -64,9 +64,9 @@ case class IssueResponse(
                           state: String,
                           title: String,
                           body: String,
-                          user: IssueUser,
+                          user: GitHubUser,
                           labels: List[IssueLabel],
-                          assignee: Option[IssueUser],
+                          assignee: Option[GitHubUser],
                           milestone: Option[IssueMilestone],
                           locked: Boolean,
                           comments: Long,
@@ -74,13 +74,13 @@ case class IssueResponse(
                           closed_at: Option[ZonedDateTime] = None,
                           created_at: ZonedDateTime,
                           updated_at: ZonedDateTime,
-                          assignees: List[IssueUser]
+                          assignees: List[GitHubUser]
                         )
 
 case class IssueListResponse(issues: List[IssueResponse])
 
 object IssueResponseProtocol extends DefaultJsonProtocol {
-  implicit val issueUserFormatter: JsonFormat[IssueUser] = jsonFormat17(IssueUser.apply)
+  implicit val issueUserFormatter: JsonFormat[GitHubUser] = jsonFormat17(GitHubUser.apply)
   implicit val issueLabelFormatter: JsonFormat[IssueLabel] = jsonFormat5(IssueLabel.apply)
   implicit val issueMilestoneFormatter: JsonFormat[IssueMilestone] = jsonFormat12(IssueMilestone.apply)
   implicit val issuePullRequestFormatter: JsonFormat[IssuePullRequest] = jsonFormat4(IssuePullRequest.apply)

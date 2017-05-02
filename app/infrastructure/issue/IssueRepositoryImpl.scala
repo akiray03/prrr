@@ -27,7 +27,7 @@ class IssueRepositoryImpl @Inject()(
   }
 
   override def fetchIssues(issueQuery: IssueQueryEntity): List[IssueEntity] = {
-    var req = queryBuilder(issueQuery).header("Authorization", authorizationHeader())
+    val req = queryBuilder(issueQuery).header("Authorization", authorizationHeader())
     val response: Response = HTTP.get(req)
     val body = """{"issues":""" + response.textBody + """}"""
 
@@ -41,7 +41,7 @@ class IssueRepositoryImpl @Inject()(
 
   private def queryBuilder(issueQuery: IssueQueryEntity): Request = {
     val url = f"https://api.github.com/repos/${issueQuery.ownerName}/${issueQuery.repositoryName}/issues"
-    var req = Request(url)
+    val req = Request(url)
 
     val state = issueQuery.state.getOrElse("open")
     req.queryParam("state", state)
@@ -81,7 +81,7 @@ class IssueRepositoryImpl @Inject()(
   }
 
   private def convertToIssueEntities(issues: IssueListResponse): List[IssueEntity] = {
-    var repoNames = mutable.HashMap.empty[String, String]
+    val repoNames = mutable.HashMap.empty[String, String]
 
     issues.issues.foreach(issue => {
       if (!repoNames.contains(issue.repository_url)) {
@@ -102,7 +102,7 @@ class IssueRepositoryImpl @Inject()(
   }
 
   private def fetchRepositoryName(repoURL: String): String = {
-    var req = Request(repoURL).header("Authorization", authorizationHeader())
+    val req = Request(repoURL).header("Authorization", authorizationHeader())
     val response: Response = HTTP.get(req)
 
     val jsonAst = JsonParser(response.textBody)

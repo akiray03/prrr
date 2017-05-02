@@ -6,9 +6,12 @@ import play.api.Logger
 import spray.json._
 import DefaultJsonProtocol._
 import library.json_protocol.ZonedDateTimeJsonProtocol._
+import skinny.http.{HTTP, Request, Response}
+import scala.collection.mutable
+
 import response.{IssueListResponse, IssueResponse}
 import response.IssueResponseProtocol._
-import skinny.http.{HTTP, Request, Response}
+
 import domains.issue.{IssueEntity, IssueRepository}
 import domains.issue_query.IssueQueryEntity
 
@@ -78,16 +81,34 @@ class IssueRepositoryImpl @Inject()(
   }
 
   private def convertToIssueEntities(issues: IssueListResponse): List[IssueEntity] = {
+    var repoNames = mutable.HashMap.empty[String, String]
+
+    issues.issues.foreach(issue => {
+      if (!repoNames.contains(issue.repository_url)) {
+        val repoName = fetchRepositoryName(issue.repository_url)
+        repoNames.put(issue.repository_url, repoName)
+      }
+    })
+
     issues.issues.map(issue =>
       IssueEntity(
-        id = issue.id,
         number = issue.number,
-        userName = "",
-        repositoryName = "",
+        fullName = repoNames.getOrElse(issue.repository_url, ""),
         title = issue.title,
         body = issue.body,
         html_url = issue.html_url
       )
     )
+  }
+
+  private def fetchRepositoryName(repoURL: String): String = {
+    var req = Request(repoURL).header("Authorization", authorizationHeader())
+    val response: Response = HTTP.get(req)
+
+    val jsonAst = JsonParser(response.textBody)
+    jsonAst.asJsObject.getFields("full_name") match {
+      case Seq(JsString(full_name)) => full_name
+      case _ => ""
+    }
   }
 }

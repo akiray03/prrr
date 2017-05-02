@@ -11,6 +11,7 @@ import skinny.http._
 import spray.json._
 import DefaultJsonProtocol._
 
+import domains.issue.IssueEntityProtocol._
 import domains.issue_query.IssueQueryProtocol._
 import services.issue_query.IssueQueryService
 
@@ -22,8 +23,8 @@ class IssuesController @Inject()(issueQueryService: IssueQueryService, issueServ
     query match {
       case Some(x) => {
         val issues = issueService.fetchIssues(x)
-        Ok(issues)
-        // Ok(JsArray(issues.map{ issue => issue.toJson }.toVector).prettyPrint)
+        // Ok(issues)
+        Ok(JsArray(issues.map{ issue => issue.toJson }.toVector).prettyPrint)
       }
       case None => NotFound("""{"status": "error", "code": "Not Found"}""")
     }

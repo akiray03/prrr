@@ -2,14 +2,20 @@ package infrastructure.issue
 
 import javax.inject.Inject
 
-import domains.issue.IssueRepository
-import domains.issue_query.IssueQueryEntity
+import play.api.Logger
+import spray.json._
+import DefaultJsonProtocol._
+import library.json_protocol.ZonedDateTimeJsonProtocol._
+import response.{IssueListResponse, IssueResponse}
+import response.IssueResponseProtocol._
 import skinny.http.{HTTP, Request, Response}
+import domains.issue.{IssueEntity, IssueRepository}
+import domains.issue_query.IssueQueryEntity
 
 class IssueRepositoryImpl @Inject()(
                                      configuration: play.api.Configuration
                                    ) extends IssueRepository{
-  override def fetchIssues(issueQuery: IssueQueryEntity): String = {
+  override def fetchIssues(issueQuery: IssueQueryEntity): List[IssueEntity] = {
     val githubToken = configuration.getString("secrets.github_token")
     if (githubToken.isEmpty) {
       throw new Exception("GITHUB TOKEN が設定されてないぜ")
@@ -18,8 +24,14 @@ class IssueRepositoryImpl @Inject()(
 
     var req = queryBuilder(issueQuery).header("Authorization", authHeader)
     val response: Response = HTTP.get(req)
+    val body = """{"issues":""" + response.textBody + """}"""
 
-    response.textBody
+    Logger.debug(body)
+
+    val jsonAst = JsonParser(body)
+    val issues = jsonAst.convertTo[IssueListResponse]
+
+    convertToIssueEntities(issues)
   }
 
   private def queryBuilder(issueQuery: IssueQueryEntity): Request = {
@@ -61,5 +73,19 @@ class IssueRepositoryImpl @Inject()(
     }
 
     req
+  }
+
+  private def convertToIssueEntities(issues: IssueListResponse): List[IssueEntity] = {
+    issues.issues.map(issue =>
+      IssueEntity(
+        id = issue.id,
+        number = issue.number,
+        userName = "",
+        repositoryName = "",
+        title = issue.title,
+        body = issue.body,
+        html_url = issue.html_url
+      )
+    )
   }
 }

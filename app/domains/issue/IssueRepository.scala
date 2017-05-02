@@ -4,5 +4,5 @@ import domains.issue.IssueEntity
 import domains.issue_query.IssueQueryEntity
 
 trait IssueRepository {
-  def fetchIssues(issueQuery: IssueQueryEntity): String
+  def fetchIssues(issueQuery: IssueQueryEntity): List[IssueEntity]
 }

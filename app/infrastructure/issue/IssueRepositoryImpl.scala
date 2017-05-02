@@ -83,13 +83,15 @@ class IssueRepositoryImpl @Inject()(
   private def convertToIssueEntities(issues: IssueListResponse): List[IssueEntity] = {
     val repoNames = fetchRepositoryNames(issues)
 
-    issues.issues.map(issue =>
+    issues.issues.map(i =>
       IssueEntity(
-        number = issue.number,
-        fullName = repoNames.getOrElse(issue.repository_url, ""),
-        title = issue.title,
-        body = issue.body,
-        html_url = issue.html_url
+        number = i.number,
+        fullName = repoNames.getOrElse(i.repository_url, ""),
+        title = i.title,
+        body = i.body,
+        html_url = i.html_url,
+        created_at = i.created_at,
+        updated_at = i.updated_at
       )
     )
   }

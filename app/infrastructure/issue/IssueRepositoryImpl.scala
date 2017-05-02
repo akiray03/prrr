@@ -15,14 +15,16 @@ import domains.issue_query.IssueQueryEntity
 class IssueRepositoryImpl @Inject()(
                                      configuration: play.api.Configuration
                                    ) extends IssueRepository{
-  override def fetchIssues(issueQuery: IssueQueryEntity): List[IssueEntity] = {
+  private def authorizationHeader(): String = {
     val githubToken = configuration.getString("secrets.github_token")
     if (githubToken.isEmpty) {
       throw new Exception("GITHUB TOKEN が設定されてないぜ")
     }
-    val authHeader = f"token ${githubToken.get}%s"
+    f"token ${githubToken.get}%s"
+  }
 
-    var req = queryBuilder(issueQuery).header("Authorization", authHeader)
+  override def fetchIssues(issueQuery: IssueQueryEntity): List[IssueEntity] = {
+    var req = queryBuilder(issueQuery).header("Authorization", authorizationHeader())
     val response: Response = HTTP.get(req)
     val body = """{"issues":""" + response.textBody + """}"""
 

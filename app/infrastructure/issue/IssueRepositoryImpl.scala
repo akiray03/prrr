@@ -2,7 +2,6 @@ package infrastructure.issue
 
 import javax.inject.Inject
 
-import play.api.Logger
 import spray.json._
 import DefaultJsonProtocol._
 import library.json_protocol.ZonedDateTimeJsonProtocol._
@@ -30,8 +29,6 @@ class IssueRepositoryImpl @Inject()(
     val req = queryBuilder(issueQuery).header("Authorization", authorizationHeader())
     val response: Response = HTTP.get(req)
     val body = """{"issues":""" + response.textBody + """}"""
-
-    Logger.debug(body)
 
     val jsonAst = JsonParser(body)
     val issues = jsonAst.convertTo[IssueListResponse]

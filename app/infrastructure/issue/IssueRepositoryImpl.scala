@@ -81,14 +81,7 @@ class IssueRepositoryImpl @Inject()(
   }
 
   private def convertToIssueEntities(issues: IssueListResponse): List[IssueEntity] = {
-    val repoNames = mutable.HashMap.empty[String, String]
-
-    issues.issues.foreach(issue => {
-      if (!repoNames.contains(issue.repository_url)) {
-        val repoName = fetchRepositoryName(issue.repository_url)
-        repoNames.put(issue.repository_url, repoName)
-      }
-    })
+    val repoNames = fetchRepositoryNames(issues)
 
     issues.issues.map(issue =>
       IssueEntity(
@@ -99,6 +92,19 @@ class IssueRepositoryImpl @Inject()(
         html_url = issue.html_url
       )
     )
+  }
+
+  private def fetchRepositoryNames(issues: IssueListResponse): Map[String, String] = {
+    val repoNames = mutable.HashMap.empty[String, String]
+
+    issues.issues.foreach(issue => {
+      if (!repoNames.contains(issue.repository_url)) {
+        val repoName = fetchRepositoryName(issue.repository_url)
+        repoNames.put(issue.repository_url, repoName)
+      }
+    })
+
+    repoNames.toMap[String, String]
   }
 
   private def fetchRepositoryName(repoURL: String): String = {

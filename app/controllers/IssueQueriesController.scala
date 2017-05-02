@@ -17,4 +17,13 @@ class IssueQueriesController @Inject()(issueQueryService: IssueQueryService) ext
     val queries = issueQueryService.listAll()
     Ok(JsArray(queries.map{ query => query.toJson }.toVector).prettyPrint)
   }
+
+  def show(id: Long) = Action {
+    val query = issueQueryService.fetch(id)
+    query match {
+      case Some(x) => Ok(x.toJson.prettyPrint)
+      case None => NotFound("""{"status": "error", "code": "Not Found"}""")
+    }
+  }
+
 }

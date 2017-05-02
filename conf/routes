@@ -2,9 +2,10 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET /users  controllers.user.UserController.index
-GET /issues controllers.IssuesController.index
-GET /issue_queries controllers.IssueQueriesController.index
+GET /users                      controllers.user.UserController.index
+GET /issues                     controllers.IssuesController.index
+GET /issue_queries              controllers.IssueQueriesController.index
+GET /issue_queries/:id          controllers.IssueQueriesController.show(id: Long)
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index

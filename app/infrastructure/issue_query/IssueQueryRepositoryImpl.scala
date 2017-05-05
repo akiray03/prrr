@@ -129,4 +129,9 @@ class IssueQueryRepositoryImpl @Inject()(issueQueryPersistenceRepository: IssueQ
 
     issueQueryPersistenceRepository.insert(entity)
   }
+
+
+  def fetch(id: Long): Option[IssueQueryEntity] = {
+    listAll().find(p => p.id.getOrElse(0) == id)
+  }
 }

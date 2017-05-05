@@ -6,6 +6,7 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.Logger
+import play.api.libs.json
 import spray.json._
 import DefaultJsonProtocol._
 
@@ -29,7 +30,7 @@ class IssueQueriesController @Inject()(issueQueryService: IssueQueryService) ext
     }
   }
 
-  def create = Action(parse.json) { request =>
+  def create: Action[json.JsValue] = Action(parse.json) { request =>
     val requestBody = request.body
     Logger.info(s"request = ${requestBody.toString()}")
 
